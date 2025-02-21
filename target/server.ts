@@ -28,6 +28,8 @@ export class Target1 extends Agent<Env> {
         // take every chunk and send it to the target2 agent
         const id = crypto.randomUUID();
         const stub = await getAgentByName(this.env.Target2, this.name);
+        // we may rewrite this to use a BYOB reader for perf
+        // https://github.com/lambrospetrou/tiddlyflare/blob/2f6cd98eab2d77f8319cca21922dea3a8ca41d9a/src/durable-objects.ts#L308
         const reader = request.body?.getReader();
         while (true) {
           const content = await reader?.read();
