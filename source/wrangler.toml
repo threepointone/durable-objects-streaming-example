@@ -1,0 +1,6 @@
+name = "durable-objects-streaming-example-source"
+main = "./server.ts"
+compatibility_date = "2025-02-21"
+compatibility_flags = ["nodejs_compat"]
+
+assets = { directory = "public" }

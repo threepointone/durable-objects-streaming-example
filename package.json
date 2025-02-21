@@ -1,0 +1,32 @@
+{
+  "name": "durable-objects-streaming-example",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"(cd source; vite dev)\" \"(cd target; wrangler dev)\" \"open http://localhost:5173\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@ai-sdk/openai": "^1.1.13",
+    "@cloudflare/vite-plugin": "^0.1.1",
+    "@cloudflare/workers-types": "^4.20250214.0",
+    "@types/node": "^22.13.4",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "ai": "^4.1.45",
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.1",
+    "wrangler": "^3.109.2"
+  },
+  "dependencies": {
+    "@cloudflare/agents": "^0.0.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

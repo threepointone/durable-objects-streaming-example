@@ -1,0 +1,20 @@
+name = "durable-objects-streaming-example-target"
+main = "./server.ts"
+compatibility_date = "2025-02-21"
+compatibility_flags = ["nodejs_compat"]
+
+dev.port = 8788
+dev.inspector_port = 9230
+
+[[durable_objects.bindings]]
+name = "Target1"
+class_name = "Target1"
+
+[[durable_objects.bindings]]
+name = "Target2"
+class_name = "Target2"
+
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Target1", "Target2"]
