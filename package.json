@@ -25,7 +25,7 @@
     "wrangler": "^3.109.2"
   },
   "dependencies": {
-    "@cloudflare/agents": "^0.0.2",
+    "@cloudflare/agents": "^0.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }
