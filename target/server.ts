@@ -53,25 +53,55 @@ export class Target1 extends Agent<Env> {
 }
 
 export class Target2 extends Agent<Env> {
-  chunks: Record<string, string> = {};
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
   }
   onConnect() {
     // broadcast all available chunks
-    for (const [id, content] of Object.entries(this.chunks)) {
-      this.broadcast(JSON.stringify({ id, content, done: false }));
+    try {
+      const chunks = this.sql`
+        SELECT * FROM chunks
+      `;
+      for (const chunk of chunks) {
+        this.broadcast(JSON.stringify(chunk));
+      }
+    } catch (e) {
+      // console.warning("table doesn't exist");
     }
   }
   receive(chunk: Chunk) {
+    this.sql`
+      CREATE TABLE IF NOT EXISTS chunks (
+        id TEXT PRIMARY KEY,
+        content TEXT,
+        done BOOLEAN
+      )
+    `;
+
+    // messages will come in as chunks associated with an id
+    // so create the row with id if not available, else append the content to an existing row
+
+    this.sql`
+      INSERT INTO chunks (id, content, done) VALUES (${chunk.id}, ${chunk.content}, ${chunk.done})
+      ON CONFLICT (id) DO UPDATE SET content = chunks.content || ${chunk.content}, done = ${chunk.done}
+    `;
+
     // if done is true, then delete the row
     if (chunk.done) {
-      delete this.chunks[chunk.id];
-    } else {
-      this.chunks[chunk.id] ||= "";
-      this.chunks[chunk.id] += chunk.content;
+      this.sql`
+        DELETE FROM chunks WHERE id = ${chunk.id}
+      `;
     }
 
+    // delete table if no rows remain
+    const rows = this.sql`
+      SELECT COUNT(*) FROM chunks
+    `;
+    if (rows[0]["COUNT(*)"] === 0) {
+      this.sql`
+        DROP TABLE chunks
+      `;
+    }
     this.broadcast(JSON.stringify(chunk));
   }
 }
