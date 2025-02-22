@@ -64,7 +64,7 @@ export class Target2 extends Agent<Env> {
     }
   }
   receive(chunk: Chunk) {
-    // // if done is true, then delete the row
+    // if done is true, then delete the row
     if (chunk.done) {
       delete this.chunks[chunk.id];
     } else {
